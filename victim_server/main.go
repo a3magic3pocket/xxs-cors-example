@@ -14,7 +14,6 @@ func main() {
 		c.HTML(http.StatusOK, "victim-community.html", gin.H{})
 	})
 	router.GET("victim/community/kakao", func(c *gin.Context) {
-		c.SetCookie("test", "test", 3600, "/", ".kakao.com", false, false)
 		c.HTML(http.StatusOK, "victim-community-kakao.html", gin.H{})
 	})
 	router.Run(":8888")
