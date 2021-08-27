@@ -1,0 +1,72 @@
+{{ define "victim-community-kakao.html" }}
+
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta
+      content="minimum-scale=1.0, width=device-width, maximum-scale=1, user-scalable=no"
+      name="viewport"
+    />
+    <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+  </head>
+
+  <body>
+    <div>로그인 상태: <span id="login-status">로그인 안 함</span></div>
+    <a id="login">카카오 로그인</a>
+
+    <div>
+      <div style="display: block; margin-top: 100px">게시판 낚시 글</div>
+      <button
+        onclick="(function() {
+        var xhr = new XMLHttpRequest();
+        var url = 'http://127.0.0.1:8889/trap';
+
+        xhr.open('POST', url, true);
+        xhr.withCredentials = true
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === XMLHttpRequest.DONE) {
+            var status = xhr.status;
+            if (status === 0 || (status >= 200 && status < 400)) {
+              console.log('You are in my trap', xhr.responseText)
+            } else {
+              console.log('I failed to get you into my trap.', xhr.responseText)
+            }
+          }
+        } 
+        xhr.send()
+      })()"
+      >
+        ☆★☆★누르면 놀라운 일이 벌어짐☆★☆★
+      </button>
+    </div>
+
+    <script type="text/javascript">
+      var loginStatusElem;
+
+      document.addEventListener("DOMContentLoaded", function () {
+        loginStatusElem = document.querySelector("#login-status");
+
+        // 카카오 javascript key 입력
+        Kakao.init("your-kakao-app-javascript-key");
+        Kakao.isInitialized();
+        console.log(Kakao.isInitialized());
+
+        Kakao.Auth.createLoginButton({
+          container: "#login",
+          success: function (response) {
+            console.log("success", response);
+            loginStatusElem.innerHTML = "로그인 중";
+          },
+          fail: function (error) {
+            console.log("login is failed", error);
+            loginStatusElem.innerHTML = "로그인 실패";
+          },
+        });
+      });
+    </script>
+  </body>
+</html>
+
+{{ end }}
